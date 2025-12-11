@@ -12,8 +12,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
 
-    "baseUrl": ".",               // <-- REQUIRED
-    "paths": {                    // <-- REQUIRED
+    "baseUrl": ".",
+    "paths": {
       "@/*": ["./*"]
     }
   },
