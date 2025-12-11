@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import resume from "@/lib/resume";
+import resume from "../../../lib/resume";
 
 function normalize(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
@@ -44,4 +44,5 @@ export async function POST(req: Request) {
   return NextResponse.json({
     answer: `Here’s what I found related to your question:\n\n${top}\n\n(Excerpted from your résumé)`
   });
+
 }
