@@ -38,11 +38,31 @@ export async function POST(req: Request) {
         resume.summary
     });
   }
-
-  const top = ranked.slice(0, 2).map((x) => x.c).join("\n\n");
-
-  return NextResponse.json({
-    answer: `Here’s what I found related to your question:\n\n${top}\n\n(Excerpted from your résumé)`
-  });
-
+  
+  // Extract only the most relevant sentences
+  function extractRelevantLines(text: string, query: string) {
+    const sentences = text.split(/[\.\n]+/);
+    const q = normalize(query).split(" ");
+    let best = "";
+    let bestScore = 0;
+  
+    for (const s of sentences) {
+      const sNorm = normalize(s);
+      let score = 0;
+      q.forEach((w) => sNorm.includes(w) && score++);
+      if (score > bestScore) {
+        bestScore = score;
+        best = s.trim();
+      }
+    }
+  
+    return best || text.trim();
+  }
+  
+  const top = ranked[0].c;
+  const answer = extractRelevantLines(top, question);
+  
+  return NextResponse.json({ answer });
+  
 }
+
