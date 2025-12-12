@@ -1,5 +1,4 @@
-const resume = {
-  text: `
+const resume = `
 Miguel Lacanienta
 AI Track - BS Computer Science, Mapúa University
 Contact: mmlacanienta@gmail.com | 0917 811 2386 | Makati | linkedin.com/in/miguel-lacanienta
@@ -36,10 +35,6 @@ PROJECTS:
 EDUCATION:
 BS Computer Science - AI track
 Mapúa University 2021–2025
-  `,
-  summary: `
-Miguel Lacanienta is a BS Computer Science (AI Track) student with certifications in Azure AI, Azure Admin, Power Platform, Oracle Cloud, and Neo4j. Skilled in Python, JS, Power Platform, and cloud platforms. Experience includes YOLOv9 PPE detection, Chrome extensions, LangChain AI apps, and ARIMA forecasting.
-  `
-};
+`;
 
 export default resume;
