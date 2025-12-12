@@ -8,10 +8,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ answer: "Please ask a question." });
     }
 
-    // Check if HF_TOKEN exists
-    if (!process.env.HF_TOKEN) {
+    // Check if GEMINI_API_KEY exists
+    if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({ 
-        answer: "ERROR: HF_TOKEN not set. Please add it in Vercel Settings → Environment Variables." 
+        answer: "ERROR: GEMINI_API_KEY not set. Please add it in Vercel Settings → Environment Variables." 
       });
     }
 
@@ -24,77 +24,69 @@ export async function POST(req: Request) {
       });
     }
 
-    // Build a clear prompt
-    const prompt = `You are answering questions about Miguel Lacanienta's resume. 
-Answer based ONLY on the information below. Be concise and specific.
+    // Build prompt
+    const prompt = `You are a helpful assistant answering questions about Miguel Lacanienta's resume.
 
-RESUME:
+RESUME INFORMATION:
 ${resume.text}
+
+INSTRUCTIONS:
+- Answer the question using ONLY the information from the resume above
+- Be concise and direct
+- If the information is not in the resume, say "I don't have that information in Miguel's resume."
 
 QUESTION: ${question}
 
 ANSWER:`;
 
-    console.log("Calling HuggingFace API...");
+    console.log("Calling Google Gemini API...");
 
-    // Call NEW HuggingFace endpoint
+    // Call Google Gemini API
     const response = await fetch(
-      "https://router.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1",
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.HF_TOKEN}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          inputs: prompt,
-          parameters: {
-            max_new_tokens: 250,
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }],
+          generationConfig: {
             temperature: 0.3,
-            top_p: 0.9,
-            return_full_text: false
+            maxOutputTokens: 300,
           }
         })
       }
     );
 
-    console.log("Response status:", response.status);
+    console.log("Gemini response status:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("HuggingFace error:", errorText);
-      
-      if (response.status === 503) {
-        return NextResponse.json({
-          answer: "The AI model is loading. Please wait 20-30 seconds and try again."
-        });
-      }
+      console.error("Gemini API error:", errorText);
       
       return NextResponse.json({
-        answer: `Error: Unable to get response from AI (${response.status}). Please try again.`
+        answer: `Error: Unable to get response from AI (${response.status}). Please check your API key.`
       });
     }
 
     const result = await response.json();
-    console.log("HuggingFace response:", result);
+    console.log("Gemini response:", JSON.stringify(result, null, 2));
 
-    // Extract answer from various response formats
+    // Extract answer from Gemini response format
     let answer = "No answer available.";
     
-    if (Array.isArray(result)) {
-      answer = result[0]?.generated_text || answer;
-    } else if (result?.generated_text) {
-      answer = result.generated_text;
-    } else if (result?.[0]?.generated_text) {
-      answer = result[0].generated_text;
+    if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
+      answer = result.candidates[0].content.parts[0].text.trim();
     }
 
-    // Clean up answer
-    answer = answer.trim();
-    
     // If empty or too short, provide fallback
-    if (!answer || answer.length < 5) {
-      answer = "I couldn't find an answer to that question in the resume. Try asking about Miguel's skills, education, projects, or certifications.";
+    if (!answer || answer.length < 5 || answer === "No answer available.") {
+      answer = "I couldn't find an answer to that question in Miguel's resume. Try asking about his skills, education, projects, or certifications.";
     }
 
     return NextResponse.json({ answer });
