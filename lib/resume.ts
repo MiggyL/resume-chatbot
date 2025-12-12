@@ -1,40 +1,23 @@
-const resume = `
+const resume = {
+  text: `
 Miguel Lacanienta
-AI Track - BS Computer Science, Mapúa University
-Contact: mmlacanienta@gmail.com | 0917 811 2386 | Makati | linkedin.com/in/miguel-lacanienta
+Objective: Programming or DevOps using Power Platform, Python, JavaScript, and cloud technologies such as Azure and Oracle Cloud Infrastructure.
 
-OBJECTIVE:
-Seeking roles in Programming, DevOps, AI, and Power Platform development.
+Skills:
+Power Platform: Microsoft Power Automate, Microsoft Power Apps, Dataverse
+Programming: Python, Javascript, AI
+Cloud: Microsoft Azure, Oracle Cloud Infrastructure
 
-SKILLS:
-Programming: Python, JavaScript
-Cloud: Azure, Oracle Cloud Infrastructure
-AI: Machine Learning, YOLOv9, LangChain, Mistral, RAG pipelines
-Power Platform: Power Automate, Power Apps, Dataverse
-Others: Chrome Extensions, Flask, REST APIs
+Certifications: Microsoft Certified: Azure AI Fundamentals (2024); Azure AI Engineer Associate (2024); Azure Administrator Associate (2025); Power Platform Fundamentals (2024); multiple Oracle Cloud certifications (2021-2024); Neo4j certifications (2025); PCEP 2019; JSE 2023.
 
-CERTIFICATIONS:
-Azure AI Fundamentals (2024)
-Azure AI Engineer Associate (2024)
-Azure Administrator Associate (2025)
-Power Platform Fundamentals (2024)
-Oracle Cloud Infrastructure Foundations (2021)
-Oracle Cloud Architect Associate (2023)
-Oracle Cloud Multicloud Architect (2024)
-Neo4j Certified Professional (2025)
-PCEP (2019)
-JSE (2023)
+Education: B.S. Computer Science, AI Track, Mapúa University SY 2021-2025; multiple online courses in data science, ML, AI, python classes.
 
-PROJECTS:
-- PPE CCTV Detection using YOLOv9 for monitoring safety compliance.
-- Ollopa Chrome Extension using Selenium + Flask.
-- Predictive Analysis for Food Prices using ARIMA.
-- LangChain Mistral-7B Application.
-- LangChain Auto-GPT style autonomous agent.
+Projects: PPE CCTV (YOLOv9), Ollopa Chrome Extension (Selenium/Flask), Predictive Analysis for Food Prices (ARIMA), LangChain Mistral-7B app, LangChain Auto-GPT app.
 
-EDUCATION:
-BS Computer Science - AI track
-Mapúa University 2021–2025
-`;
+Contact: Tower A - 1819 Jazz Residences, Makati. +63 (917) 811 2386. mmlacanienta@gmail.com. linkedin.com/in/miguel-lacanienta/
+  `,
+  // short summary for fallback
+  summary: "Miguel Lacanienta — B.S. Computer Science (AI track) student with skills in Power Platform, Python, JavaScript, Azure and Oracle Cloud; many Azure and Oracle certifications; projects include PPE CCTV (YOLO), Chrome extension, and LangChain-based apps. Contact: mmlacanienta@gmail.com"
+};
 
 export default resume;
