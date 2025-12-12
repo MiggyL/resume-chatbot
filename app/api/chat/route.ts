@@ -1,26 +1,14 @@
 import { NextResponse } from "next/server";
-import resume from "../../../lib/resume";
 
 export async function POST(req: Request) {
   const { question } = await req.json();
 
-  if (!question) {
-    return NextResponse.json({ answer: "Please enter a question." });
-  }
+  // IMPORT YOUR RESUME TEXT
+  const resume = await import("@/lib/resume").then(m => m.default);
 
-  // Build the prompt for the LLM
-  const prompt = `
-You are a helpful assistant that answers questions based ONLY on the resume information below.
-
-RESUME:
-${resume.text}
-
-Now answer this question clearly and directly:
-"${question}"
-`;
-
+  // CALL HUGGINGFACE INFERENCE
   const response = await fetch(
-    "https://api-inference.huggingface.co/models/google/gemma-2b-it",
+    "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1",
     {
       method: "POST",
       headers: {
@@ -28,17 +16,24 @@ Now answer this question clearly and directly:
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        inputs: prompt,
-        parameters: {
-          max_new_tokens: 200,
-          temperature: 0.4
-        }
+        inputs: `
+You are a résumé assistant. 
+Answer the user's question using ONLY the information inside the résumé.
+
+Résumé:
+${resume}
+
+User question: ${question}
+
+If the answer is not in the résumé, reply: "No answer available."
+`
       })
     }
   );
 
-  const data = await response.json();
-  const answer = data?.[0]?.generated_text || "No answer available.";
+  const result = await response.json();
 
-  return NextResponse.json({ answer });
+  return NextResponse.json({
+    answer: result?.[0]?.generated_text ?? "No answer available."
+  });
 }
