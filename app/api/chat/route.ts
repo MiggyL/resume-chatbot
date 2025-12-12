@@ -41,9 +41,9 @@ ANSWER:`;
 
     console.log("Calling Google Gemini API...");
 
-    // Call Google Gemini API (using v1beta with gemini-1.5-flash-latest)
+    // Call Google Gemini API (using v1beta with basic gemini-pro)
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
